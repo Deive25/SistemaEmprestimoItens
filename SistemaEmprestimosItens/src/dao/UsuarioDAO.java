@@ -24,7 +24,7 @@ public class UsuarioDAO {
     }
 
     public void inserir(Usuario usuario) {
-        String sql = "INSERT INTO usuario (nome, matricula, contato) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO Usuario (nome, matricula, contato) VALUES (?, ?, ?)";
         try {
             PreparedStatement stmt = this.conn.prepareStatement(sql);
             stmt.setString(1, usuario.getNome());
@@ -37,7 +37,7 @@ public class UsuarioDAO {
     }
 
     public Usuario getUsuario(int id) {
-        String sql = "SELECT * FROM usuario WHERE id = ?";
+        String sql = "SELECT * FROM Usuario WHERE id = ?";
         try {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, id);
@@ -60,7 +60,7 @@ public class UsuarioDAO {
 
     public void editarUsuario(Usuario usuario) {
         try {
-            String sql = "UPDATE usuario SET nome=?, matricula=?, contato=? WHERE id=?";
+            String sql = "UPDATE Usuario SET nome=?, matricula=?, contato=? WHERE id=?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, usuario.getNome());
             stmt.setString(2, usuario.getMatricula());
@@ -74,7 +74,7 @@ public class UsuarioDAO {
 
     public void excluir(int id) {
         try {
-            String sql = "DELETE FROM usuario WHERE id=?";
+            String sql = "DELETE FROM Usuario WHERE id=?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, id);
             stmt.execute();
@@ -84,7 +84,7 @@ public class UsuarioDAO {
     }
     
     public List<Usuario> getTodosUsuarios() {
-        String sql = "SELECT * FROM usuario";
+        String sql = "SELECT * FROM Usuario";
         List<Usuario> listaUsuarios = new ArrayList<>();
         try (PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {

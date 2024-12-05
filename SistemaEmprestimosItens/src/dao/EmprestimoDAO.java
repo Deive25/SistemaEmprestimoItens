@@ -23,7 +23,7 @@ public class EmprestimoDAO {
     }
 
     public void inserir(Emprestimo emprestimo) {
-        String sql = "INSERT INTO emprestimo (id_usuario, id_item, data_emprestimo, data_devolucao) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO Emprestimo (id_usuario, id_item, data_emprestimo, data_devolucao) VALUES (?, ?, ?, ?)";
         try {
             PreparedStatement stmt = this.conn.prepareStatement(sql);
             stmt.setInt(1, emprestimo.getUsuario().getId());
@@ -37,7 +37,7 @@ public class EmprestimoDAO {
     }
 
     public Emprestimo getEmprestimo(int id) {
-        String sql = "SELECT * FROM emprestimo WHERE id = ?";
+        String sql = "SELECT * FROM Emprestimo WHERE id = ?";
         try {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, id);
@@ -55,7 +55,7 @@ public class EmprestimoDAO {
 
     public void editarEmprestimo(Emprestimo emprestimo) {
         try {
-            String sql = "UPDATE emprestimo SET id_usuario=?, id_item=?, data_emprestimo=?, data_devolucao=? WHERE id=?";
+            String sql = "UPDATE Emprestimo SET id_usuario=?, id_item=?, data_emprestimo=?, data_devolucao=? WHERE id=?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, emprestimo.getUsuario().getId());
             stmt.setInt(2, emprestimo.getItem().getId());
@@ -70,7 +70,7 @@ public class EmprestimoDAO {
 
     public void excluir(int id) {
         try {
-            String sql = "DELETE FROM emprestimo WHERE id=?";
+            String sql = "DELETE FROM Emprestimo WHERE id=?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, id);
             stmt.execute();
@@ -80,7 +80,7 @@ public class EmprestimoDAO {
     }
     
     public List<Emprestimo> getTodosEmprestimos() {
-        String sql = "SELECT * FROM emprestimo";
+        String sql = "SELECT * FROM Emprestimo";
         List<Emprestimo> listaEmprestimos = new ArrayList<>();
         try (PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {

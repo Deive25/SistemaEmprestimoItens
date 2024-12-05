@@ -20,7 +20,7 @@ public class HistoricoDAO {
     }
 
     public void inserir(Historico historico) {
-        String sql = "INSERT INTO historico (id_usuario, id_item, data_emprestimo, data_devolucao) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO Historico (id_usuario, id_item, data_emprestimo, data_devolucao) VALUES (?, ?, ?, ?)";
         try {
             PreparedStatement stmt = this.conn.prepareStatement(sql);
             stmt.setInt(1, historico.getUsuario().getId());
@@ -34,7 +34,7 @@ public class HistoricoDAO {
     }
 
     public Historico getHistorico(int id) {
-        String sql = "SELECT * FROM historico WHERE id = ?";
+        String sql = "SELECT * FROM Historico WHERE id = ?";
         try {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, id);
@@ -52,7 +52,7 @@ public class HistoricoDAO {
 
     public void editarHistorico(Historico historico) {
         try {
-            String sql = "UPDATE historico SET id_usuario=?, id_item=?, data_emprestimo=?, data_devolucao=? WHERE id=?";
+            String sql = "UPDATE Historico SET id_usuario=?, id_item=?, data_emprestimo=?, data_devolucao=? WHERE id=?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, historico.getUsuario().getId());
             stmt.setInt(2, historico.getItem().getId());
@@ -67,7 +67,7 @@ public class HistoricoDAO {
 
     public void excluir(int id) {
         try {
-            String sql = "DELETE FROM historico WHERE id=?";
+            String sql = "DELETE FROM Historico WHERE id=?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, id);
             stmt.execute();
@@ -77,7 +77,7 @@ public class HistoricoDAO {
     }
     
     public List<Historico> getTodosHistoricos() {
-        String sql = "SELECT * FROM historico";
+        String sql = "SELECT * FROM Historico";
         List<Historico> listaHistoricos = new ArrayList<>();
         try (PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {

@@ -23,7 +23,7 @@ public class ItemDAO {
     }
 
     public void inserir(Item item) {
-        String sql = "INSERT INTO item (nome, categoria, estado) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO Item (nome, categoria, estado) VALUES (?, ?, ?)";
         try {
             PreparedStatement stmt = this.conn.prepareStatement(sql);
             stmt.setString(1, item.getNome());
@@ -36,7 +36,7 @@ public class ItemDAO {
     }
 
     public Item getItem(int id) {
-        String sql = "SELECT * FROM item WHERE id = ?";
+        String sql = "SELECT * FROM Item WHERE id = ?";
         try {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, id);
@@ -59,7 +59,7 @@ public class ItemDAO {
 
     public void editarItem(Item item) {
         try {
-            String sql = "UPDATE item SET nome=?, categoria=?, estado=? WHERE id=?";
+            String sql = "UPDATE Item SET nome=?, categoria=?, estado=? WHERE id=?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, item.getNome());
             stmt.setString(2, item.getCategoria());
@@ -73,7 +73,7 @@ public class ItemDAO {
 
     public void excluir(int id) {
         try {
-            String sql = "DELETE FROM item WHERE id=?";
+            String sql = "DELETE FROM Item WHERE id=?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, id);
             stmt.execute();
@@ -83,7 +83,7 @@ public class ItemDAO {
     }
     
     public List<Item> getTodosItens() {
-        String sql = "SELECT * FROM item";
+        String sql = "SELECT * FROM Item";
         List<Item> listaItens = new ArrayList<>();
         try (PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
