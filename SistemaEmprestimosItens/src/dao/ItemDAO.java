@@ -89,7 +89,7 @@ public class ItemDAO {
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 Item i = new Item();
-                i.setId(rs.getInt("id"));
+                i.setId(rs.getInt("idItem"));
                 i.setNome(rs.getString("nome"));
                 i.setCategoria(rs.getString("categoria"));
                 i.setEstado(rs.getString("estado"));
@@ -99,5 +99,55 @@ public class ItemDAO {
             System.out.println("Erro ao consultar itens: " + ex.getMessage());
         }
         return listaItens;
+    }
+    
+    /**
+     * Recupera a lista de itens com o total de empréstimos, combinando dados das tabelas `Emprestimo` e `Historico`.
+    * A consulta SQL utiliza um `UNION ALL` para unir os itens dos empréstimos ativos e históricos, e conta o total de empréstimos por item.
+    * 
+    * O método executa a consulta no banco de dados e popula uma lista de objetos `Item` com os resultados.
+    * 
+    * @return Lista de objetos `Item` contendo o id, nome, categoria e o total de empréstimos de cada item.
+    */
+    public List<Item> getItensComEmprestimo() {
+        // Consulta SQL para recuperar os itens com o total de empréstimos
+        String sql = """
+            SELECT 
+                emprestimos_combinados.Item_idItem AS id_Item,
+                i.nome,
+                i.categoria,
+                COUNT(*) AS total_emprestimos
+            FROM (
+                SELECT Item_idItem FROM Emprestimo WHERE dataDevolucao IS NULL
+                UNION ALL
+                SELECT Item_idItem FROM Historico
+            ) AS emprestimos_combinados
+            JOIN Item AS i ON i.idItem = emprestimos_combinados.Item_idItem
+            GROUP BY i.idItem, i.nome, i.categoria
+            ORDER BY total_emprestimos DESC;
+        """;
+    
+        List<Item> listaItensComEmprestimo = new ArrayList<>();
+    
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery()) {
+        
+            // Itera sobre os resultados da consulta e preenche a lista de itens
+            while (rs.next()) {
+                Item i = new Item();
+                i.setId(rs.getInt("id_Item"));                // ID do item
+                i.setNome(rs.getString("nome"));              // Nome do item
+                i.setCategoria(rs.getString("categoria"));    // Categoria do item
+                i.setTotalEmprestimos(rs.getString("total_emprestimos")); // Total de empréstimos
+                listaItensComEmprestimo.add(i);               // Adiciona o item à lista
+            }
+        
+        } catch (SQLException ex) {
+            // Caso ocorra algum erro durante a execução da consulta
+            System.out.println("Erro ao consultar itens emprestados: " + ex.getMessage());
+        }
+    
+        // Retorna a lista de itens com seus respectivos totais de empréstimos
+        return listaItensComEmprestimo;
     }
 }
