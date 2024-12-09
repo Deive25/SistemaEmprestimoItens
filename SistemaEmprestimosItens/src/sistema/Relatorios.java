@@ -36,6 +36,11 @@ public class Relatorios extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblItensMaisEmprestados = new javax.swing.JTable();
         lblTituloTabela = new javax.swing.JLabel();
+        txtNome = new javax.swing.JTextField();
+        lblNomeItem = new javax.swing.JLabel();
+        txtCategoria = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        lblNomeUsuario = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -55,37 +60,76 @@ public class Relatorios extends javax.swing.JFrame {
         lblTituloTabela.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblTituloTabela.setText("Relatório Dos Itens Mais Emprestados:");
 
+        txtNome.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                txtNomeCaretUpdate(evt);
+            }
+        });
+
+        lblNomeItem.setText("Categoria:");
+
+        txtCategoria.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                txtCategoriaCaretUpdate(evt);
+            }
+        });
+
+        jLabel2.setFont(new java.awt.Font("Cantarell", 0, 18)); // NOI18N
+        jLabel2.setText("Filtrar por:");
+
+        lblNomeUsuario.setText("Nome:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 473, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblTituloTabela)
+                    .addComponent(lblTituloRelatorio)
+                    .addComponent(jLabel2)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 473, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(193, 193, 193)
-                        .addComponent(lblTituloRelatorio))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(lblTituloTabela)))
-                .addContainerGap(21, Short.MAX_VALUE))
+                        .addComponent(lblNomeUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(33, 33, 33)
+                        .addComponent(lblNomeItem, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(731, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(26, 26, 26)
                 .addComponent(lblTituloRelatorio)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(38, 38, 38)
+                .addComponent(jLabel2)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblNomeUsuario)
+                    .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblNomeItem)
+                    .addComponent(txtCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addComponent(lblTituloTabela)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(211, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtNomeCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtNomeCaretUpdate
+        preencheTabela();
+    }//GEN-LAST:event_txtNomeCaretUpdate
+
+    private void txtCategoriaCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtCategoriaCaretUpdate
+        preencheTabela();
+    }//GEN-LAST:event_txtCategoriaCaretUpdate
 
     /**
      * Preenche a tabela `tblItensMaisEmprestados` com os dados dos itens e seus respectivos totais de empréstimos.
@@ -94,7 +138,7 @@ public class Relatorios extends javax.swing.JFrame {
     public void preencheTabela(){    
         // Cria objeto ItemDAO e obtém lista de itens com empréstimos
         ItemDAO iDAO = new ItemDAO();
-        List<Item> listaItens = iDAO.getItensComEmprestimo();
+        List<Item> listaItens = iDAO.getItensComEmprestimoPorFiltro(txtNome.getText(), txtCategoria.getText());
         
          // Obtém o modelo da tabela e limpa as linhas existentes
         DefaultTableModel tabelaItensMaisEmprestados = (DefaultTableModel) tblItensMaisEmprestados.getModel();
@@ -148,9 +192,14 @@ public class Relatorios extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblNomeItem;
+    private javax.swing.JLabel lblNomeUsuario;
     private javax.swing.JLabel lblTituloRelatorio;
     private javax.swing.JLabel lblTituloTabela;
     private javax.swing.JTable tblItensMaisEmprestados;
+    private javax.swing.JTextField txtCategoria;
+    private javax.swing.JTextField txtNome;
     // End of variables declaration//GEN-END:variables
 }

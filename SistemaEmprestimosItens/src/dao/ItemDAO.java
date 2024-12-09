@@ -109,7 +109,7 @@ public class ItemDAO {
     * 
     * @return Lista de objetos `Item` contendo o id, nome, categoria e o total de empréstimos de cada item.
     */
-    public List<Item> getItensComEmprestimo() {
+    public List<Item> getItensComEmprestimoPorFiltro(String nome, String categoria) {
         // Consulta SQL para recuperar os itens com o total de empréstimos
         String sql = """
             SELECT 
@@ -123,15 +123,24 @@ public class ItemDAO {
                 SELECT Item_idItem FROM Historico
             ) AS emprestimos_combinados
             JOIN Item AS i ON i.idItem = emprestimos_combinados.Item_idItem
+                     WHERE i.nome LIKE ? AND i.categoria LIKE ?
             GROUP BY i.idItem, i.nome, i.categoria
-            ORDER BY total_emprestimos DESC;
+            ORDER BY total_emprestimos DESC
+                     ;
         """;
     
         List<Item> listaItensComEmprestimo = new ArrayList<>();
     
-        try (PreparedStatement stmt = conn.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery()) {
+        try {
         
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            String nomeU = "%"+nome+"%";
+            stmt.setString(1, nomeU);
+            String categoriaU = "%"+categoria+"%";
+            stmt.setString(2, categoriaU);
+            
+            ResultSet rs = stmt.executeQuery();
+            
             // Itera sobre os resultados da consulta e preenche a lista de itens
             while (rs.next()) {
                 Item i = new Item();
