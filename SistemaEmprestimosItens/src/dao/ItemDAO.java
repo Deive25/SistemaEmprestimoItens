@@ -36,7 +36,7 @@ public class ItemDAO {
     }
 
     public Item getItem(int id) {
-        String sql = "SELECT * FROM Item WHERE id = ?";
+        String sql = "SELECT * FROM Item WHERE idItem = ?";
         try {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, id);

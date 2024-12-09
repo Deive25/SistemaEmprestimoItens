@@ -37,7 +37,7 @@ public class UsuarioDAO {
     }
 
     public Usuario getUsuario(int id) {
-        String sql = "SELECT * FROM Usuario WHERE id = ?";
+        String sql = "SELECT * FROM Usuario WHERE idUsuario = ?";
         try {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, id);

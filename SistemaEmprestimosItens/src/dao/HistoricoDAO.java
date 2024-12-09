@@ -20,7 +20,7 @@ public class HistoricoDAO {
     }
 
     public void inserir(Historico historico) {
-        String sql = "INSERT INTO Historico (id_usuario, id_item, data_emprestimo, data_devolucao) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO Historico (Usuario_idUsuario, Item_idItem, dataEmprestimo, dataDevolucao) VALUES (?, ?, ?, ?)";
         try {
             PreparedStatement stmt = this.conn.prepareStatement(sql);
             stmt.setInt(1, historico.getUsuario().getId());
@@ -34,7 +34,7 @@ public class HistoricoDAO {
     }
 
     public Historico getHistorico(int id) {
-        String sql = "SELECT * FROM Historico WHERE id = ?";
+         String sql = "SELECT * FROM Historico WHERE idHistorico = ?;";
         try {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, id);
@@ -52,7 +52,7 @@ public class HistoricoDAO {
 
     public void editarHistorico(Historico historico) {
         try {
-            String sql = "UPDATE Historico SET id_usuario=?, id_item=?, data_emprestimo=?, data_devolucao=? WHERE id=?";
+            String sql = "UPDATE historico SET Usuario_idUsuario=?, Item_idItem=?, dataEmprestimo=?, dataDevolucao=? WHERE id=?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, historico.getUsuario().getId());
             stmt.setInt(2, historico.getItem().getId());
@@ -89,17 +89,41 @@ public class HistoricoDAO {
         }
         return listaHistoricos;
     }
+    
+    public List<Historico> getHistoricoPorFiltro(String nomeUsuario, String nomeItem) {
+        String sql = "SELECT * FROM v_historico WHERE nomeUsuario LIKE ? AND nomeItem LIKE ?";
+
+        List<Historico> listaHistoricos = new ArrayList<>();
+        
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            String nomeU = "%"+nomeUsuario+"%";
+            stmt.setString(1, nomeU);
+            String nomeI = "%"+nomeItem+"%";
+            stmt.setString(2, nomeI);
+            
+            ResultSet rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                listaHistoricos.add(extrairHistoricoDoResultSet(rs));
+            }
+        } catch (SQLException ex) {
+            System.out.println("Erro ao consultar históricos: " + ex.getMessage());
+        }
+        
+        return listaHistoricos;
+    }
 
     private Historico extrairHistoricoDoResultSet(ResultSet rs) throws SQLException {
         UsuarioDAO usuarioDAO = new UsuarioDAO();
         ItemDAO itemDAO = new ItemDAO();
         
         return new Historico(
-                rs.getInt("id"),
-                usuarioDAO.getUsuario(rs.getInt("id_usuario")),
-                itemDAO.getItem(rs.getInt("id_item")),
-                rs.getString("data_emprestimo"),
-                rs.getString("data_devolucao")
+                rs.getInt("idHistorico"),
+                usuarioDAO.getUsuario(rs.getInt("Usuario_idUsuario")),
+                itemDAO.getItem(rs.getInt("Item_idItem")),
+                rs.getString("dataEmprestimo"),
+                rs.getString("dataDevolucao")
         );
     }
 }
