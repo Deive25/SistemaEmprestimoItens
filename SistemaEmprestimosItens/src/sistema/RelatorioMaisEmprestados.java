@@ -7,6 +7,9 @@ package sistema;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import dao.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import model.*;
 
 /**
@@ -22,6 +25,7 @@ public class RelatorioMaisEmprestados extends javax.swing.JFrame {
         initComponents();
         preencheTabela();
         preencheCmbItems();
+        tblItensMaisEmprestados.setDefaultEditor(Object.class, null); //Desativa a edicao da tabela
     }
 
     /**
@@ -134,11 +138,17 @@ public class RelatorioMaisEmprestados extends javax.swing.JFrame {
 
     private void preencheCmbItems() {
         ItemDAO iDao = new ItemDAO();
-        
         cmbCategoria.addItem("");
         
-        for (Item item : iDao.getTodosItens()) {
-            cmbCategoria.addItem(item.getCategoria());    
+        // Hash - Garantir que 'e unico
+        Set<String> categoriasUnicas = new HashSet<>();
+
+         for (Item item : iDao.getTodosItens()) {
+            String categoria = item.getCategoria().trim(); // Remove espaços em branco
+            
+            if (categoriasUnicas.add(categoria)) {
+                cmbCategoria.addItem(categoria);
+            }
         }
     }
     
