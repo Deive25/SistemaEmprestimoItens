@@ -36,10 +36,10 @@ public class ConsultaHistorico extends javax.swing.JFrame {
         for (Historico h : historicos) {
             
             Object[] obj = new Object[] {
-                h.getDataEmprestimo(),
-                h.getDataDevolucao(),
                 h.getUsuario().getNome(),
-                h.getItem().getNome()
+                h.getItem().getNome(),
+                h.getDataEmprestimo(),
+                h.getDataDevolucao()
             };
             tabela.addRow(obj);
         }
@@ -70,7 +70,7 @@ public class ConsultaHistorico extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Data de Emprestimo", "Data de Devolução", "Usuário", "Item"
+                "Usuário", "Item", "Data de Emprestimo", "Data de Devolução"
             }
         ));
         jScrollPane1.setViewportView(tblHistorico);
