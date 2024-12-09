@@ -21,6 +21,7 @@ public class RelatorioMaisEmprestados extends javax.swing.JFrame {
     public RelatorioMaisEmprestados() {
         initComponents();
         preencheTabela();
+        preencheCmbItems();
     }
 
     /**
@@ -38,9 +39,9 @@ public class RelatorioMaisEmprestados extends javax.swing.JFrame {
         lblTituloTabela = new javax.swing.JLabel();
         txtNome = new javax.swing.JTextField();
         lblNomeItem = new javax.swing.JLabel();
-        txtCategoria = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         lblNomeUsuario = new javax.swing.JLabel();
+        cmbCategoria = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -68,16 +69,16 @@ public class RelatorioMaisEmprestados extends javax.swing.JFrame {
 
         lblNomeItem.setText("Categoria:");
 
-        txtCategoria.addCaretListener(new javax.swing.event.CaretListener() {
-            public void caretUpdate(javax.swing.event.CaretEvent evt) {
-                txtCategoriaCaretUpdate(evt);
-            }
-        });
-
         jLabel2.setFont(new java.awt.Font("Cantarell", 0, 18)); // NOI18N
         jLabel2.setText("Filtrar por:");
 
         lblNomeUsuario.setText("Nome:");
+
+        cmbCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbCategoriaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -85,7 +86,7 @@ public class RelatorioMaisEmprestados extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 473, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblTituloTabela)
                     .addComponent(lblTituloRelatorio)
@@ -96,8 +97,8 @@ public class RelatorioMaisEmprestados extends javax.swing.JFrame {
                         .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(33, 33, 33)
                         .addComponent(lblNomeItem, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbCategoria, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap(731, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -112,7 +113,7 @@ public class RelatorioMaisEmprestados extends javax.swing.JFrame {
                     .addComponent(lblNomeUsuario)
                     .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblNomeItem)
-                    .addComponent(txtCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cmbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(lblTituloTabela)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -127,10 +128,20 @@ public class RelatorioMaisEmprestados extends javax.swing.JFrame {
         preencheTabela();
     }//GEN-LAST:event_txtNomeCaretUpdate
 
-    private void txtCategoriaCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtCategoriaCaretUpdate
+    private void cmbCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCategoriaActionPerformed
         preencheTabela();
-    }//GEN-LAST:event_txtCategoriaCaretUpdate
+    }//GEN-LAST:event_cmbCategoriaActionPerformed
 
+    private void preencheCmbItems() {
+        ItemDAO iDao = new ItemDAO();
+        
+        cmbCategoria.addItem("");
+        
+        for (Item item : iDao.getTodosItens()) {
+            cmbCategoria.addItem(item.getCategoria());    
+        }
+    }
+    
     /**
      * Preenche a tabela `tblItensMaisEmprestados` com os dados dos itens e seus respectivos totais de empréstimos.
      * O método obtém a lista de itens com a classe `ItemDAO`, limpa a tabela existente e a preenche com as novas informações.
@@ -138,7 +149,9 @@ public class RelatorioMaisEmprestados extends javax.swing.JFrame {
     public void preencheTabela(){    
         // Cria objeto ItemDAO e obtém lista de itens com empréstimos
         ItemDAO iDAO = new ItemDAO();
-        List<Item> listaItens = iDAO.getItensComEmprestimoPorFiltro(txtNome.getText(), txtCategoria.getText());
+        String selectedItem = (String) cmbCategoria.getSelectedItem();
+        System.out.println(selectedItem);
+        List<Item> listaItens = iDAO.getItensComEmprestimoPorFiltro(txtNome.getText(), selectedItem);
         
          // Obtém o modelo da tabela e limpa as linhas existentes
         DefaultTableModel tabelaItensMaisEmprestados = (DefaultTableModel) tblItensMaisEmprestados.getModel();
@@ -193,6 +206,7 @@ public class RelatorioMaisEmprestados extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> cmbCategoria;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblNomeItem;
@@ -200,7 +214,6 @@ public class RelatorioMaisEmprestados extends javax.swing.JFrame {
     private javax.swing.JLabel lblTituloRelatorio;
     private javax.swing.JLabel lblTituloTabela;
     private javax.swing.JTable tblItensMaisEmprestados;
-    private javax.swing.JTextField txtCategoria;
     private javax.swing.JTextField txtNome;
     // End of variables declaration//GEN-END:variables
 }
