@@ -60,7 +60,7 @@ public class UsuarioDAO {
 
     public void editarUsuario(Usuario usuario) {
         try {
-            String sql = "UPDATE Usuario SET nome=?, matricula=?, contato=? WHERE id=?";
+            String sql = "UPDATE Usuario SET nome=?, matricula=?, contato=? WHERE idUsuario=?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, usuario.getNome());
             stmt.setString(2, usuario.getMatricula());
@@ -74,7 +74,7 @@ public class UsuarioDAO {
 
     public void excluir(int id) {
         try {
-            String sql = "DELETE FROM Usuario WHERE id=?";
+            String sql = "DELETE FROM Usuario WHERE idUsuario=?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, id);
             stmt.execute();

@@ -52,7 +52,7 @@ public class HistoricoDAO {
 
     public void editarHistorico(Historico historico) {
         try {
-            String sql = "UPDATE historico SET Usuario_idUsuario=?, Item_idItem=?, dataEmprestimo=?, dataDevolucao=? WHERE id=?";
+            String sql = "UPDATE Historico SET Usuario_idUsuario=?, Item_idItem=?, dataEmprestimo=?, dataDevolucao=? WHERE idHistorico=?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, historico.getUsuario().getId());
             stmt.setInt(2, historico.getItem().getId());
@@ -67,7 +67,7 @@ public class HistoricoDAO {
 
     public void excluir(int id) {
         try {
-            String sql = "DELETE FROM Historico WHERE id=?";
+            String sql = "DELETE FROM Historico WHERE idHistorico=?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, id);
             stmt.execute();
@@ -75,7 +75,7 @@ public class HistoricoDAO {
             System.out.println("Erro ao excluir registro de histórico: " + ex.getMessage());
         }
     }
-    
+
     public List<Historico> getTodosHistoricos() {
         String sql = "SELECT * FROM Historico";
         List<Historico> listaHistoricos = new ArrayList<>();

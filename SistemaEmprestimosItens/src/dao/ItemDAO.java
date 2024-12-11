@@ -59,7 +59,7 @@ public class ItemDAO {
 
     public void editarItem(Item item) {
         try {
-            String sql = "UPDATE Item SET nome=?, categoria=?, estado=? WHERE id=?";
+            String sql = "UPDATE Item SET nome=?, categoria=?, estado=? WHERE idItem=?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, item.getNome());
             stmt.setString(2, item.getCategoria());
@@ -73,7 +73,7 @@ public class ItemDAO {
 
     public void excluir(int id) {
         try {
-            String sql = "DELETE FROM Item WHERE id=?";
+            String sql = "DELETE FROM Item WHERE idItem=?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, id);
             stmt.execute();
