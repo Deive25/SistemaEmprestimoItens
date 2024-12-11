@@ -23,13 +23,12 @@ public class EmprestimoDAO {
     }
 
     public void inserir(Emprestimo emprestimo) {
-        String sql = "INSERT INTO Emprestimo (id_usuario, id_item, data_emprestimo, data_devolucao) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO Emprestimo (Usuario_idUsuario, Item_idItem  ) VALUES (?, ?)";
         try {
             PreparedStatement stmt = this.conn.prepareStatement(sql);
             stmt.setInt(1, emprestimo.getUsuario().getId());
             stmt.setInt(2, emprestimo.getItem().getId());
-            stmt.setString(3, emprestimo.getDataEmprestimo());
-            stmt.setString(4, emprestimo.getDataDevolucao());
+            //stmt.setString(3, emprestimo.getDataDevolucao());
             stmt.execute();
         } catch (SQLException ex) {
             System.out.println("Erro ao inserir empréstimo: " + ex.getMessage());
@@ -37,9 +36,10 @@ public class EmprestimoDAO {
     }
 
     public Emprestimo getEmprestimo(int id) {
-        String sql = "SELECT * FROM Emprestimo WHERE id = ?";
+        String sql = "SELECT * FROM Emprestimo WHERE idEmprestimo = ?";
         try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+            PreparedStatement stmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, 
+                    ResultSet.CONCUR_UPDATABLE);
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -55,13 +55,12 @@ public class EmprestimoDAO {
 
     public void editarEmprestimo(Emprestimo emprestimo) {
         try {
-            String sql = "UPDATE Emprestimo SET id_usuario=?, id_item=?, data_emprestimo=?, data_devolucao=? WHERE id=?";
+            String sql = "UPDATE Emprestimo SET Usuario_idUsuario=?, Item_idItem=?, dataDevolucao=? WHERE idEmprestimo=?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, emprestimo.getUsuario().getId());
             stmt.setInt(2, emprestimo.getItem().getId());
-            stmt.setString(3, emprestimo.getDataEmprestimo());
-            stmt.setString(4, emprestimo.getDataDevolucao());
-            stmt.setInt(5, emprestimo.getId());
+            stmt.setString(3, emprestimo.getDataDevolucao());
+            stmt.setInt(4, emprestimo.getId());
             stmt.execute();
         } catch (SQLException ex) {
             System.out.println("Erro ao atualizar empréstimo: " + ex.getMessage());
@@ -70,7 +69,7 @@ public class EmprestimoDAO {
 
     public void excluir(int id) {
         try {
-            String sql = "DELETE FROM Emprestimo WHERE id=?";
+            String sql = "DELETE FROM Emprestimo WHERE idEmprestimo=?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, id);
             stmt.execute();
@@ -98,11 +97,11 @@ public class EmprestimoDAO {
         ItemDAO itemDAO = new ItemDAO();
         
         return new Emprestimo(
-                rs.getInt("id"),
-                usuarioDAO.getUsuario(rs.getInt("id_usuario")),
-                itemDAO.getItem(rs.getInt("id_item")),
-                rs.getString("data_emprestimo"),
-                rs.getString("data_devolucao")
+                rs.getInt("idEmprestimo"),
+                usuarioDAO.getUsuario(rs.getInt("Usuario_idUsuario")),
+                itemDAO.getItem(rs.getInt("Item_idItem")),
+                rs.getString("dataEmprestimo"),
+                rs.getString("dataDevolucao")
         );
     }
 }

@@ -4,11 +4,32 @@
  */
 package model;
 
+import java.util.Objects;
+
 /**
  *
  * @author Desktop
  */
 public class Item {
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Item other = (Item) obj;
+        return this.id == other.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    
     private int id;
     private String nome;
     private String categoria;
@@ -54,4 +75,12 @@ public class Item {
     public void setTotalEmprestimos(String totalEmprestimos) {
         this.totalEmprestimos = totalEmprestimos;
     }
+
+    @Override
+    public String toString() {
+        return "id=" + id + ", nome=" + nome;
+    }
+
+    
+    
 }

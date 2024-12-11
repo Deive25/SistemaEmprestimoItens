@@ -90,7 +90,7 @@ public class UsuarioDAO {
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 Usuario u = new Usuario();
-                u.setId(rs.getInt("id"));
+                u.setId(rs.getInt("idUsuario"));
                 u.setNome(rs.getString("nome"));
                 u.setMatricula(rs.getString("matricula"));
                 u.setContato(rs.getString("contato"));

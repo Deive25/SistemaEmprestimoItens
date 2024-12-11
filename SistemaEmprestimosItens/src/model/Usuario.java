@@ -4,11 +4,45 @@
  */
 package model;
 
+import java.util.Objects;
+
 public class Usuario {
+
+   
     private int id;
     private String nome;
     private String matricula;
     private String contato;
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Usuario other = (Usuario) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        if (!Objects.equals(this.nome, other.nome)) {
+            return false;
+        }
+        if (!Objects.equals(this.matricula, other.matricula)) {
+            return false;
+        }
+        return Objects.equals(this.contato, other.contato);
+    }
 
     public int getId() {
         return id;
@@ -44,6 +78,8 @@ public class Usuario {
 
     @Override
     public String toString() {
-        return this.nome;
+        return "id=" + id + ", nome=" + nome;
     }
+
+    
 }
