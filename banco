@@ -1,3 +1,6 @@
+create database bancoEmprestimo;
+use bancoEmprestimo;
+
 -- Banco de dados
 
 CREATE TABLE IF NOT EXISTS  Item (
@@ -123,6 +126,7 @@ FROM  Historico h
 JOIN Usuario u ON h.Usuario_idUsuario = u.idUsuario
 JOIN Item i ON h.Item_idItem = i.idItem;
 
+--Inserts opcionais
 -- Inserindo dados na tabela Item
 INSERT INTO Item (nome, categoria, estado) VALUES 
 ('Livro de Programação', 'Livro', 'disponivel'),
