@@ -1,0 +1,173 @@
+-- Banco de dados
+
+CREATE TABLE IF NOT EXISTS  Item (
+  idItem INT NOT NULL AUTO_INCREMENT,
+  nome VARCHAR(100) NOT NULL,
+  categoria VARCHAR(45) NOT NULL,
+  estado ENUM('disponivel', 'emprestado') NOT NULL,
+  PRIMARY KEY (idItem)
+  );
+
+CREATE TABLE IF NOT EXISTS Usuario (
+  idUsuario INT NOT NULL AUTO_INCREMENT,
+  nome VARCHAR(100) NOT NULL,
+  matricula VARCHAR(45) NOT NULL,
+  contato VARCHAR(45) NOT NULL,
+  PRIMARY KEY (idUsuario)
+  );
+
+CREATE TABLE IF NOT EXISTS Emprestimo (
+  idEmprestimo INT NOT NULL AUTO_INCREMENT,
+  dataEmprestimo DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  dataDevolucao DATETIME NULL,
+  dataLimiteDevolucao DATETIME NULL,
+  Usuario_idUsuario INT NOT NULL,
+  Item_idItem INT NOT NULL,
+  PRIMARY KEY (idEmprestimo),
+  CONSTRAINT fk_Emprestimo_Usuario
+    FOREIGN KEY (Usuario_idUsuario)
+    REFERENCES Usuario (idUsuario)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_Emprestimo_Item
+    FOREIGN KEY (Item_idItem)
+    REFERENCES Item (idItem)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+CREATE TABLE IF NOT EXISTS Historico (
+  idHistorico INT NOT NULL AUTO_INCREMENT,
+  dataEmprestimo DATETIME NOT NULL,
+  dataDevolucao DATETIME NOT NULL,
+  Usuario_idUsuario INT NOT NULL,
+  Item_idItem INT NOT NULL,
+  PRIMARY KEY (idHistorico),
+  CONSTRAINT fk_Historico_Usuario
+    FOREIGN KEY (Usuario_idUsuario)
+    REFERENCES Usuario (idUsuario)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_Historico_Item
+    FOREIGN KEY (Item_idItem)
+    REFERENCES Item (idItem)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- Triggers
+
+DELIMITER $$
+CREATE TRIGGER Atualizar_Historico
+AFTER UPDATE ON EMPRESTIMO
+FOR EACH ROW
+BEGIN
+    IF NEW.dataDevolucao IS NOT NULL THEN
+        -- Insere o registro no historico
+        INSERT INTO HISTORICO (dataEmprestimo, dataDevolucao, Usuario_idUsuario, Item_idItem)
+        VALUES (NEW.dataEmprestimo, NEW.dataDevolucao, NEW.Usuario_idUsuario, NEW.Item_idItem);
+
+        -- Atualiza o estado do item para 'disponivel'
+        UPDATE Item
+        SET estado = 'disponivel'
+        WHERE idItem = NEW.Item_idItem;
+    END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER Verificar_Emprestimo
+BEFORE INSERT ON Emprestimo
+FOR EACH ROW
+BEGIN
+    -- Verificar se o item já está emprestado
+    IF EXISTS (
+        SELECT 1 
+        FROM Emprestimo
+        WHERE Item_idItem = NEW.Item_idItem
+        AND dataDevolucao IS NULL
+    ) THEN
+        -- Se o item estiver emprestado, gerar um erro
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Este item já está emprestado';
+    END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER Atualizar_Estado_Item
+AFTER INSERT ON Emprestimo
+FOR EACH ROW
+BEGIN
+    -- Atualiza o estado do item para 'emprestado'
+    UPDATE Item
+    SET estado = 'emprestado'
+    WHERE idItem = NEW.Item_idItem;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER Set_Data_Limite
+BEFORE INSERT ON EMPRESTIMO
+FOR EACH ROW
+BEGIN
+    SET NEW.dataLimiteDevolucao = DATE_ADD(NOW(),INTERVAL 5 DAY);
+END$$
+DELIMITER ;
+
+-- View
+
+CREATE VIEW v_historico AS
+SELECT 
+    h.*, 
+    u.nome AS nomeUsuario, 
+    i.nome AS nomeItem
+FROM  Historico h
+JOIN Usuario u ON h.Usuario_idUsuario = u.idUsuario
+JOIN Item i ON h.Item_idItem = i.idItem;
+
+-- Inserindo dados na tabela Item
+INSERT INTO Item (nome, categoria, estado) VALUES 
+('Livro de Programação', 'Livro', 'disponivel'),
+('Notebook Dell', 'Eletronico', 'disponivel'),
+('Calculadora Científica', 'Acessório', 'disponivel'),
+('Livro de Matemática', 'Livro', 'emprestado');
+
+-- Inserindo dados na tabela Usuario
+INSERT INTO Usuario (nome, matricula, contato) VALUES 
+('João Silva', '2023001', 'joao@gmail.com'),
+('Maria Oliveira', '2023002', 'maria@gmail.com'),
+('Carlos Souza', '2023003', 'carlos@gmail.com'),
+('Ana Costa', '2023004', 'ana@gmail.com'),
+('Pedro Almeida', '2023005', 'pedro@gmail.com');
+
+-- Histórico de empréstimos do Livro de Programação
+INSERT INTO Historico (dataEmprestimo, dataDevolucao, Usuario_idUsuario, Item_idItem) VALUES
+('2023-11-01 10:00:00', '2023-11-05 12:00:00', 1, 1), -- João Silva
+('2023-11-10 14:00:00', '2023-11-15 17:30:00', 2, 1), -- Maria Oliveira
+('2023-11-20 09:30:00', '2023-11-25 16:00:00', 3, 1); -- Carlos Souza
+
+-- Empréstimo atual do Livro de Programação
+INSERT INTO Emprestimo (dataEmprestimo, dataDevolucao, Usuario_idUsuario, Item_idItem) VALUES
+(NOW(), NULL, 1, 1); -- João Silva emprestou novamente
+
+-- Histórico de empréstimos do Notebook Dell
+INSERT INTO Historico (dataEmprestimo, dataDevolucao, Usuario_idUsuario, Item_idItem) VALUES
+('2023-10-01 13:00:00', '2023-10-10 18:00:00', 4, 2), -- Ana Costa
+('2023-10-15 09:00:00', '2023-10-20 11:30:00', 5, 2); -- Pedro Almeida
+
+-- Empréstimo atual do Notebook Dell
+INSERT INTO Emprestimo (dataEmprestimo, dataDevolucao, Usuario_idUsuario, Item_idItem) VALUES
+(NOW(), NULL, 2, 2); -- Maria Oliveira emprestou
+
+-- Histórico de empréstimos da Calculadora Científica
+INSERT INTO Historico (dataEmprestimo, dataDevolucao, Usuario_idUsuario, Item_idItem) VALUES
+('2023-09-01 08:00:00', '2023-09-05 10:00:00', 1, 3), -- João Silva
+('2023-09-10 14:30:00', '2023-09-15 15:00:00', 2, 3), -- Maria Oliveira
+('2023-09-20 12:30:00', '2023-09-25 16:00:00', 3, 3); -- Carlos Souza
+
+-- Histórico de empréstimos do Livro de Matemática
+INSERT INTO Historico (dataEmprestimo, dataDevolucao, Usuario_idUsuario, Item_idItem) VALUES
+('2023-08-01 10:00:00', '2023-08-05 12:00:00', 4, 4), -- Ana Costa
+('2023-08-10 14:00:00', '2023-08-15 17:30:00', 5, 4); -- Pedro Almeida
+
+-- Empréstimo atual do Livro de Matemática
+INSERT INTO Emprestimo (dataEmprestimo, dataDevolucao, Usuario_idUsuario, Item_idItem) VALUES
+(NOW(), NULL, 1, 4); -- João Silva emprestou
