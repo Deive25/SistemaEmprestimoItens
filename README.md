@@ -14,7 +14,7 @@
 Trabalho final para a disciplina de **Laboratório de Desenvolvimento de Software**, com extensão em **Implementação de Banco de Dados**.
 
 ## Vídeo Demonstrativo
-[https://www.youtube.com/watch?v=w_x_2PJczFc&ab_channel=ThiagoDev]
+https://www.youtube.com/watch?v=w_x_2PJczFc&ab_channel=ThiagoDev
 
 ---
 
