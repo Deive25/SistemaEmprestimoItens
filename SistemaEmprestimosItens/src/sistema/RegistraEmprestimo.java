@@ -7,8 +7,8 @@ package sistema;
 import dao.EmprestimoDAO;
 import dao.ItemDAO;
 import dao.UsuarioDAO;
-import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import model.Emprestimo;
 import model.Item;
 import model.Usuario;
@@ -26,26 +26,29 @@ public class RegistraEmprestimo extends javax.swing.JFrame {
         initComponents();
         preencherComboUsuarios();
         preencherComboItens();
-        
     }
+    
     public void preencherComboUsuarios(){
-         UsuarioDAO cDAO = new UsuarioDAO();
-         List<Usuario> ListaUsuarios = cDAO.getTodosUsuarios();
-         for(Usuario u : ListaUsuarios){
-            comboBoxUsario.addItem(u);
-         }
-     }
+        UsuarioDAO cDAO = new UsuarioDAO();
+        List<Usuario> ListaUsuarios = cDAO.getTodosUsuarios();
+        for(Usuario u : ListaUsuarios){
+           comboBoxUsuario.addItem(u.getNome());
+        }
+    }
     
     public void preencherComboItens(){
-         ItemDAO iDAO = new ItemDAO();
-         List<Item> ListaItens = iDAO.getTodosItens();
-         for(Item i : ListaItens){
-            comboBoxItem.addItem(i);
-         }
-     }
+        ItemDAO iDAO = new ItemDAO();
+        List<Item> ListaItens = iDAO.getDisponiveis();
+        comboBoxItem.removeAllItems(); // Limpa a comboBox para evitar duplicação
+        for(Item i : ListaItens){
+           comboBoxItem.addItem(i.getNome());
+        }
+    }
     
-    
-    
+     public void atualizar(){
+        preencherComboItens();
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -58,30 +61,22 @@ public class RegistraEmprestimo extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        comboBoxUsario = new javax.swing.JComboBox();
+        comboBoxUsuario = new javax.swing.JComboBox();
         comboBoxItem = new javax.swing.JComboBox();
         btnRegistraEmprestimo = new javax.swing.JToggleButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setText("Registrar Emprestimo:");
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 3, 36)); // NOI18N
+        jLabel1.setText("Registrar Emprestimo");
 
-        jLabel2.setText("Id Usuario:");
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel2.setText("Usuario:");
 
-        jLabel3.setText("Id Item:");
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel3.setText("Item:");
 
-        comboBoxUsario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboBoxUsarioActionPerformed(evt);
-            }
-        });
-
-        comboBoxItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboBoxItemActionPerformed(evt);
-            }
-        });
-
+        btnRegistraEmprestimo.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnRegistraEmprestimo.setText("Registrar Emprestimo");
         btnRegistraEmprestimo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -93,65 +88,64 @@ public class RegistraEmprestimo extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(35, 35, 35)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(comboBoxUsario, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(139, 139, 139)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 51, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(comboBoxItem, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap())))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(234, 234, 234)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnRegistraEmprestimo)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(116, 116, 116))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3))
+                        .addGap(31, 31, 31)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(comboBoxUsuario, 0, 264, Short.MAX_VALUE)
+                            .addComponent(comboBoxItem, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(74, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(14, 14, 14)
+                .addGap(38, 38, 38)
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(comboBoxUsario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(comboBoxItem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(49, 49, 49)
+                .addGap(47, 47, 47)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(comboBoxUsuario))
+                .addGap(41, 41, 41)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(comboBoxItem, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(39, 39, 39)
                 .addComponent(btnRegistraEmprestimo)
-                .addContainerGap(260, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void comboBoxUsarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxUsarioActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_comboBoxUsarioActionPerformed
-
-    private void comboBoxItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxItemActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_comboBoxItemActionPerformed
-
     private void btnRegistraEmprestimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistraEmprestimoActionPerformed
         Emprestimo e = new Emprestimo();
-        e.setUsuario((Usuario)comboBoxUsario.getSelectedItem());
-        e.setItem((Item)comboBoxItem.getSelectedItem());
+        String nomeUser  = ((String)comboBoxUsuario.getSelectedItem());
+        String nomeItem = ((String)comboBoxItem.getSelectedItem());
   
         EmprestimoDAO pd = new EmprestimoDAO();
+        UsuarioDAO uDAO = new UsuarioDAO();
+        Usuario u = new Usuario();
+        ItemDAO iDAO = new ItemDAO();
+        Item i = new Item();
+        
+        u = uDAO.buscarUsuarioPorNome(nomeUser);
+        i = iDAO.buscarItemPorNome(nomeItem);
+        e.setItem(i);
+        e.setUsuario(u);
         pd.inserir(e);
+        JOptionPane.showMessageDialog(rootPane, "Emprestimo cadastrado com sucesso!", "INFO", JOptionPane.INFORMATION_MESSAGE);
+        
+        atualizar();
     }//GEN-LAST:event_btnRegistraEmprestimoActionPerformed
 
     /**
@@ -181,6 +175,8 @@ public class RegistraEmprestimo extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -193,7 +189,7 @@ public class RegistraEmprestimo extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton btnRegistraEmprestimo;
     private javax.swing.JComboBox comboBoxItem;
-    private javax.swing.JComboBox comboBoxUsario;
+    private javax.swing.JComboBox comboBoxUsuario;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

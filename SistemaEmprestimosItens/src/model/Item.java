@@ -11,7 +11,12 @@ import java.util.Objects;
  * @author Desktop
  */
 public class Item {
-
+    private int id;
+    private String nome;
+    private String categoria;
+    private String estado;
+    private String totalEmprestimos;
+    
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -28,13 +33,6 @@ public class Item {
     public int hashCode() {
         return Objects.hash(id);
     }
-
-    
-    private int id;
-    private String nome;
-    private String categoria;
-    private String estado;
-    private String totalEmprestimos;
 
     public int getId() {
         return id;
@@ -81,6 +79,4 @@ public class Item {
         return "id=" + id + ", nome=" + nome;
     }
 
-    
-    
 }

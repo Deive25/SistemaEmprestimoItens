@@ -7,7 +7,6 @@ package sistema;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import dao.*;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import model.*;
@@ -47,9 +46,9 @@ public class RelatorioMaisEmprestados extends javax.swing.JFrame {
         lblNomeUsuario = new javax.swing.JLabel();
         cmbCategoria = new javax.swing.JComboBox<>();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        lblTituloRelatorio.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        lblTituloRelatorio.setFont(new java.awt.Font("Segoe UI", 3, 24)); // NOI18N
         lblTituloRelatorio.setText("Relatórios");
 
         tblItensMaisEmprestados.setModel(new javax.swing.table.DefaultTableModel(
@@ -62,7 +61,7 @@ public class RelatorioMaisEmprestados extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tblItensMaisEmprestados);
 
-        lblTituloTabela.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblTituloTabela.setFont(new java.awt.Font("Segoe UI", 2, 20)); // NOI18N
         lblTituloTabela.setText("Relatório Dos Itens Mais Emprestados:");
 
         txtNome.addCaretListener(new javax.swing.event.CaretListener() {
@@ -71,11 +70,13 @@ public class RelatorioMaisEmprestados extends javax.swing.JFrame {
             }
         });
 
+        lblNomeItem.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lblNomeItem.setText("Categoria:");
 
-        jLabel2.setFont(new java.awt.Font("Cantarell", 0, 18)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 2, 20)); // NOI18N
         jLabel2.setText("Filtrar por:");
 
+        lblNomeUsuario.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lblNomeUsuario.setText("Nome:");
 
         cmbCategoria.addActionListener(new java.awt.event.ActionListener() {
@@ -90,39 +91,49 @@ public class RelatorioMaisEmprestados extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 473, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblTituloTabela)
-                    .addComponent(lblTituloRelatorio)
-                    .addComponent(jLabel2)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblNomeUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(33, 33, 33)
-                        .addComponent(lblNomeItem, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbCategoria, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(731, Short.MAX_VALUE))
+                        .addComponent(lblTituloRelatorio)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblNomeUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblNomeItem))
+                                .addGap(17, 17, 17)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(cmbCategoria, 0, 213, Short.MAX_VALUE)
+                                    .addComponent(txtNome))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblTituloTabela)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 479, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(27, 27, 27))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addComponent(lblTituloRelatorio)
-                .addGap(38, 38, 38)
-                .addComponent(jLabel2)
+                .addContainerGap()
+                .addComponent(lblTituloRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblNomeUsuario)
-                    .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblNomeItem)
-                    .addComponent(cmbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(lblTituloTabela)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(211, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblNomeUsuario)
+                            .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblNomeItem)
+                            .addComponent(cmbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblTituloTabela)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         pack();
@@ -140,10 +151,10 @@ public class RelatorioMaisEmprestados extends javax.swing.JFrame {
         ItemDAO iDao = new ItemDAO();
         cmbCategoria.addItem("");
         
-        // Hash - Garantir que 'e unico
+        //Hash - Garantir que 'e unico
         Set<String> categoriasUnicas = new HashSet<>();
 
-         for (Item item : iDao.getTodosItens()) {
+        for (Item item : iDao.getTodosItens()) {
             String categoria = item.getCategoria().trim(); // Remove espaços em branco
             
             if (categoriasUnicas.add(categoria)) {
@@ -163,11 +174,11 @@ public class RelatorioMaisEmprestados extends javax.swing.JFrame {
         System.out.println(selectedItem);
         List<Item> listaItens = iDAO.getItensComEmprestimoPorFiltro(txtNome.getText(), selectedItem);
         
-         // Obtém o modelo da tabela e limpa as linhas existentes
+        // Obtém o modelo da tabela e limpa as linhas existentes
         DefaultTableModel tabelaItensMaisEmprestados = (DefaultTableModel) tblItensMaisEmprestados.getModel();
         tabelaItensMaisEmprestados.setNumRows(0);
         
-         // Preenche a tabela com os dados dos itens
+        // Preenche a tabela com os dados dos itens
         for(Item i: listaItens){
             Object [] obj = new Object []{
                 i.getId(), // ID do item
@@ -204,6 +215,8 @@ public class RelatorioMaisEmprestados extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(RelatorioMaisEmprestados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 

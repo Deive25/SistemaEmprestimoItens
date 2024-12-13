@@ -7,8 +7,6 @@ package model;
 import java.util.Objects;
 
 public class Usuario {
-
-   
     private int id;
     private String nome;
     private String matricula;
@@ -80,6 +78,4 @@ public class Usuario {
     public String toString() {
         return "id=" + id + ", nome=" + nome;
     }
-
-    
 }

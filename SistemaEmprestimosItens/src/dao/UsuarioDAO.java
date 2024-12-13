@@ -42,6 +42,7 @@ public class UsuarioDAO {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
+            
             if (rs.next()) {
                 Usuario u = new Usuario();
                 u.setId(id);
@@ -60,7 +61,7 @@ public class UsuarioDAO {
 
     public void editarUsuario(Usuario usuario) {
         try {
-            String sql = "UPDATE Usuario SET nome=?, matricula=?, contato=? WHERE idUsuario=?";
+            String sql = "UPDATE Usuario SET nome = ?, matricula = ?, contato = ? WHERE id = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, usuario.getNome());
             stmt.setString(2, usuario.getMatricula());
@@ -74,7 +75,7 @@ public class UsuarioDAO {
 
     public void excluir(int id) {
         try {
-            String sql = "DELETE FROM Usuario WHERE idUsuario=?";
+            String sql = "DELETE FROM Usuario WHERE id = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, id);
             stmt.execute();
@@ -86,6 +87,7 @@ public class UsuarioDAO {
     public List<Usuario> getTodosUsuarios() {
         String sql = "SELECT * FROM Usuario";
         List<Usuario> listaUsuarios = new ArrayList<>();
+        
         try (PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
@@ -100,5 +102,70 @@ public class UsuarioDAO {
             System.out.println("Erro ao consultar usuários: " + ex.getMessage());
         }
         return listaUsuarios;
+    }
+    
+    public boolean isMatriculaCadastrada(String matricula) {
+        String sql = "SELECT 1 FROM Usuario WHERE matricula = ?";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, matricula);
+            ResultSet rs = stmt.executeQuery();
+            // Se houver resultado, significa que a matrícula já está cadastrada
+            return rs.next();
+        } catch (SQLException ex) {
+            System.out.println("Erro ao verificar matrícula: " + ex.getMessage());
+            return false; // Retorna false em caso de erro
+        }
+    }
+    
+    public Integer buscarIdUsuarioPorNome(String nome) {
+        String sql = "SELECT idUsuario FROM Usuario WHERE nome = ?";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, nome);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("idUsuario");
+            }
+        } catch (SQLException ex) {
+            System.out.println("Erro ao buscar ID do usuário por nome: " + ex.getMessage());
+        }
+        return null;
+    }
+    
+    public String buscarNomeUsuarioPorId(int idUsuario) {
+        String sql = "SELECT nome FROM Usuario WHERE idUsuario = ?";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, idUsuario);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getString("nome");
+            }
+        } catch (SQLException ex) {
+            System.out.println("Erro ao buscar nome do usuário: " + ex.getMessage());
+        }
+        return null; // Retorna null se não encontrar o usuário
+    }
+
+    public Usuario buscarUsuarioPorNome(String nome) {
+        String sql = "SELECT * FROM Usuario WHERE nome = ?";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, nome);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Usuario u = new Usuario();
+                u.setId(rs.getInt("idUsuario"));
+                u.setNome(rs.getString("nome"));
+                u.setMatricula(rs.getString("matricula"));
+                u.setContato(rs.getString("contato"));
+                return u;
+            }
+        } catch (SQLException ex) {
+            System.out.println("Erro ao buscar usuário por nome: " + ex.getMessage());
+        }
+        return null;
     }
 }
