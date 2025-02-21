@@ -1,7 +1,7 @@
 # Sistema de Gerenciamento de Empréstimos de Itens
 
 ## Equipe
-[@Duduceretta](https://github.com/Duduceretta)
+- [@Duduceretta](https://github.com/Duduceretta)
 - Yuri
 - Pedro
 - Thiago
