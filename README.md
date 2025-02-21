@@ -2,12 +2,11 @@
 
 ## Equipe
 - [@Duduceretta](https://github.com/Duduceretta)
-- Yuri
-- Pedro
-- Thiago
-- Gabriel
-- Machado
-- Miguel
+- [@yuyukiin](https://github.com/yuyukiin)
+- [pedr0xh](https://github.com/pedr0xh)
+- [@ThiagoMarzari](https://github.com/ThiagoMarzari)
+- [@gabriel99557](https://github.com/gabriel99557)
+- [@MiguelToller](https://github.com/MiguelToller)
 - Gabriel Machado
 
 ## Conceito
